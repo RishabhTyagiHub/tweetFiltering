@@ -1,5 +1,5 @@
 # coding=utf-8
-
+import pandas as pd
 import string
 import fasttext
 import re
@@ -7,6 +7,7 @@ from re import sub
 from sklearn.decomposition import PCA
 from matplotlib import pyplot
 from io import open
+
 
 RelevantTweets = open("RelevantTweets.txt","w", encoding='utf-8')
 NonRelevantTweets = open("NonRelevantTweets.txt", "w", encoding='utf-8')
@@ -94,6 +95,9 @@ writeDicttoFile(RelevantTweet_dictionary,"RelevantTweet")
 modelsNonRelevant = fasttext.skipgram('NonRelevantTweet.txt', 'model')
 modelsRelevant = fasttext.skipgram('RelevantTweet.txt', 'model')
 
+#print (modelsNonRelevant['more fire era this time jimin and hoseok'])
+
+
 def calcPCA(tweet_dictionary,model):
     pca = PCA(n_components=2)
     X =[]
@@ -104,6 +108,17 @@ def calcPCA(tweet_dictionary,model):
 
 resultRelevant = calcPCA(RelevantTweet_dictionary,modelsRelevant)
 resultNonRelevant = calcPCA(NonRelevantTweet_dictionary,modelsNonRelevant)
+
+
+### The below code creates a csv file to map the PCA values to the tweets for both removed and remained tweets seprately
+dfResultsRelevant = pd.DataFrame(data = RelevantTweet_dictionary.items(),columns=['TweetIndex','Tweet'])
+dfResultsRelevant['PCA'] = resultRelevant.tolist()
+dfResultsRelevant.to_csv('Dataframe_Remained', sep='\t', encoding='utf-8')
+
+dfResultsNonRelevant = pd.DataFrame(data = NonRelevantTweet_dictionary.items(),columns=['TweetIndex','Tweet'])
+dfResultsNonRelevant['PCA'] = resultNonRelevant.tolist()
+dfResultsNonRelevant.to_csv('Dataframe_Removed', sep='\t', encoding='utf-8')
+
 
 
 pyplot.scatter(resultRelevant[:, 0], resultRelevant[:, 1], color="blue")
