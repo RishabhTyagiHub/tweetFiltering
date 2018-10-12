@@ -14,7 +14,7 @@ NonRelevantTweets = open("NonRelevantTweets.txt", "w", encoding='utf-8')
 NonRelevantTweet_dictionary = {}
 RelevantTweet_dictionary = {}
 
-with open('/Users/RishabhTyagi/Downloads/sim_fire.csv') as f:
+with open('/Users/RishabhTyagi/Downloads/sim_airline.csv') as f:
     i = 0
     j = 0
     counter = 0
@@ -123,8 +123,15 @@ dfResultsNonRelevant['PCA2'] = np.array(resultNonRelevant)[:,1].tolist()
 dfResultsNonRelevant.to_csv('Dataframe_Removed.csv', sep=',', encoding='utf-8')
 #print "Removed", len(dfResultsNonRelevant)
 
-pyplot.scatter(resultRelevant[:, 0], resultRelevant[:, 1], color="blue")
+#pyplot.scatter(resultRelevant[:, 0], resultRelevant[:, 1], color="blue")
 
-pyplot.scatter(resultNonRelevant[:, 0], resultNonRelevant[:, 1], color = "red")
-pyplot.show()
+#pyplot.scatter(resultNonRelevant[:, 0], resultNonRelevant[:, 1], color = "red")
+
+pyplot.scatter(resultRelevant[:, 0], resultRelevant[:, 1], color="blue", label='remain')
+
+pyplot.scatter(resultNonRelevant[:, 0], resultNonRelevant[:, 1], color = "red", label='removed')
+pyplot.title('Fire Example Filtering PCA',size = 20)
+pyplot.legend(loc='upper right')
+pyplot.savefig('airline.pdf',bbox_inces='tight')
+#pyplot.show()
 
